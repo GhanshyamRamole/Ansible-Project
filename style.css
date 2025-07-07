@@ -1,0 +1,19 @@
+.web {
+
+      padding: 20px;
+
+}
+
+.site {
+    padding: black 300px;
+    margin-top: 30px;
+    margin-right: 300px;
+    margin-left: 300px;
+    border: black solid ;
+    border-radius: 100px;
+    background-color: #C8C8C8;
+}
+
+.next {
+    float: right;
+}
