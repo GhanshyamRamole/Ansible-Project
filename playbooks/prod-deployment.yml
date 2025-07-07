@@ -1,0 +1,35 @@
+-
+  name: Install Nginx and Serve Static Website
+  hosts: prod-env
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: latest
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+    - name: Deploy Static WebPage
+      copy:
+        src: index.html
+        dest: /var/www/html/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
