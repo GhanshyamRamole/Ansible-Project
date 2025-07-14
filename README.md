@@ -74,3 +74,107 @@ Check if the control node can ping all servers:
 ansible all -m ping
 ```
 ---
+
+### ✅ Step 6: Environment Grouping
+dev-env → server-1, server-2
+
+production-env → server-3
+
+This allows targeted playbook execution.
+---
+
+### ✅ Step 7: Update All Target Servers
+Run an ad-hoc command to update all servers:
+```bash
+ansible all -a "sudo apt update"
+```
+---
+### 📄 Playbooks
+### 📁 installation.yml (For Dev Servers)
+```bash
+---
+- hosts: dev-env
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Start Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+```
+---
+### 📁 prod-deployment.yml (For Production Server)
+```bash
+---
+- hosts: production-env
+  become: yes
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Copy custom index.html
+      copy:
+        src: ./index.html
+        dest: /var/www/html/index.html
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+```
+---
+
+### ✅ Dev Server Deployment
+Run the playbook for Dev:
+```bash
+ansible-playbook installation.yml
+server-1 and server-2 will have Nginx installed and running.
+```
+---
+### ✅ Production Deployment
+Run the playbook for Production:
+```bash
+ansible-playbook prod-deployment.yml
+```
+Access static page at: http://<server-3-public-ip>
+
+### 🧪 Final Verification
+### ✅ Nginx running on all dev and prod servers
+
+### ✅ Static ERP website loaded from server-3
+
+### 🎯 Project Outcome
+### ⚙️ Zero-touch deployment across EC2 instances
+
+### 🌍 ERP web page served on production
+
+### 📁 Environment separation via Ansible inventory grouping
+---
+###📘 Key Learnings
+Ansible simplifies infrastructure management with agentless architecture
+
+Grouped inventories allow modular playbooks
+
+Automating EC2 configuration is efficient for multi-server environments
+---
+
+### 🏁 Conclusion
+This project showcases the strength of Ansible + AWS to automate and manage cloud infrastructure at scale. With just a few playbooks and proper grouping, you can:
+
+Reduce manual overhead
+
+Achieve consistency across environments
+
+Rapidly deploy web applications like Nginx
+
+
+---
