@@ -43,3 +43,34 @@ SSH into your Ansible master server and run:
 ```bash
 sudo apt update
 sudo apt install ansible -y
+```
+---
+
+### ✅ Step 3: Transfer PEM Key to Master
+Securely move your PEM key to the Ansible master using:
+
+```bash
+scp -i "ansible-master-key.pem" ansible-master-key.pem ubuntu@<master-ip>:/home/ubuntu/keys/
+
+````
+---
+### ✅ Step 4: Configure Ansible Inventory File
+Edit the /etc/ansible/hosts file:
+```bash
+[dev-env]
+server-1 ansible_host=<IP> ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/keys/ansible-master-key.pem
+server-2 ansible_host=<IP> ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/keys/ansible-master-key.pem
+
+[production-env]
+server-3 ansible_host=<IP> ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/keys/ansible-master-key.pem
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+```
+---
+✅ Step 5: Test Server Connections
+Check if the control node can ping all servers:
+```bash
+ansible all -m ping
+```
+---
